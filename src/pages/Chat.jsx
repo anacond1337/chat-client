@@ -1,5 +1,7 @@
-const Chat = () => {
+import React from 'react'
 
-};
-
-export default Chat;
+export const Chat = () => {
+  return (
+    <div>Chat</div>
+  )
+}
