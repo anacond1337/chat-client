@@ -39,7 +39,7 @@ function Join() {
 
       {/* Form and join */}
       {/* eslint-disable-next-line react/jsx-no-bind */}
-      <Box component="form" onSubmit={handleSubmit} noValidate>
+      <Box component="form" onSubmit={handleSubmit}>
         {/* Username input */}
         <TextField
           margin="normal"
