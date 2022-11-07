@@ -15,6 +15,7 @@ function App() {
   useEffect(() => {
     socket.on('server_msg', (stream) => {
       setMessages((oldMessage) => [...oldMessage, stream]);
+      console.log(stream);
     });
   }, [socket]);
 
@@ -36,10 +37,15 @@ function App() {
         <button type="submit">Send</button>
       </form>
 
-      {/* Messages holder shit */}
+      {/* Messages holder */}
 
       <div>
-        {messages.map((mess) => <p key={uuidv4()}>{mess}</p>)}
+        {messages.map((mess) => {
+          if (socket.id === mess.id) {
+            return <h1 key={uuidv4()}>{mess.msg}</h1>;
+          }
+          return <p key={uuidv4()}>{mess.msg}</p>;
+        })}
       </div>
     </div>
   );
