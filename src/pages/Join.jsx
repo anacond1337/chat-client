@@ -3,6 +3,7 @@ import {
   Container, Avatar, Typography, Box, TextField, Button,
 } from '@mui/material';
 import ChatIcon from '@mui/icons-material/Chat';
+import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
 
 function Join() {
@@ -10,12 +11,14 @@ function Join() {
 
   const [userInput, setUserInput] = useState('');
   const [channelInput, setChannelInput] = useState('');
+  const navigate = useNavigate();
 
   function handleSubmit(e) {
     e.preventDefault();
     dispatch({ type: 'JOIN', payload: { user: userInput, channel: channelInput } });
     setUserInput('');
     setChannelInput('');
+    navigate('/chat');
   }
 
   return (
