@@ -1,20 +1,23 @@
 import {
-  Avatar, TextField, Button, Container,
+  TextField, Button, Container,
 } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import io from 'socket.io-client';
 import { v4 as uuidv4 } from 'uuid';
+import Message from '../components/Message';
+import { UserContext } from '../context/UserContext';
 
 const socket = io.connect('http://localhost:8000');
 
-const sendMessage = (payload) => {
-  socket.emit('client_msg', payload);
+const sendMessage = (payload, user) => {
+  socket.emit('client_msg', { payload, user });
 };
 
-function App() {
+function Chat() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     socket.on('server_msg', (stream) => {
@@ -25,40 +28,46 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setInput('');
-    sendMessage(input);
+    sendMessage(input, user);
   };
 
   return (
-    <div>
+    <Container>
+
+      {/* Messages holder */}
+
+      <Container>
+        {messages.map((mess) => (
+          <Message
+            msg={mess}
+            isMyMessage={socket.id === mess.id}
+            key={uuidv4()}
+          />
+        ))}
+      </Container>
+
       {/* Form */}
-      <form onSubmit={handleSubmit}>
-        <input
+      <Container
+        sx={{
+          display: 'flex', position: 'fixed', bottom: 0, marginBottom: '1.5rem',
+        }}
+        component="form"
+        onSubmit={handleSubmit}
+      >
+        <TextField
+          component="span"
+          fullWidth
+          id="fullWidth"
           placeholder="Write something..."
           onChange={({ target }) => setInput(target.value)}
           value={input}
         />
-        <button type="submit">Send</button>
-      </form>
-
-      {/* Messages holder */}
-
-      <div>
-        {messages.map((mess) => {
-          if (socket.id === mess.id) {
-            return <h1 key={uuidv4()}>{mess.msg}</h1>;
-          }
-          return <p key={uuidv4()}>{mess.msg}</p>;
-        })}
-      </div>
-      <Avatar sx={{ bgcolor: 'green' }}>A</Avatar>
-      <Container sx={{ display: 'flex' }}>
-        <TextField component="span" fullWidth id="fullWidth" />
-        <Button component="span" variant="contained" endIcon={<SendIcon />}>
+        <Button type="submit" variant="contained" endIcon={<SendIcon />}>
           Send
         </Button>
       </Container>
-    </div>
+    </Container>
   );
 }
 
-export default App;
+export default Chat;
