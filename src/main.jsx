@@ -1,14 +1,11 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import {BrowserRouter, Routes, Route} from 'react-router-dom';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
 
-import Join from './pages/Join';
-import Chat from './pages/Chat';
+import { UserContextProvider } from './context/UserContext';
+import App from './App';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<Join />} />
-    </Routes>
-  </BrowserRouter>
+  <UserContextProvider>
+    <App />
+  </UserContextProvider>,
 );

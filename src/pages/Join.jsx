@@ -1,44 +1,80 @@
-import React, { useEffect, useState } from 'react';
-import io from 'socket.io-client';
+import React, { useContext, useState } from 'react';
+import {
+  Container, Avatar, Typography, Box, TextField, Button,
+} from '@mui/material';
+import ChatIcon from '@mui/icons-material/Chat';
+import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../context/UserContext';
 
-const socket = io.connect('http://localhost:8000');
+function Join() {
+  const { dispatch } = useContext(UserContext);
 
-const sendMessage = (payload) => {
-  socket.emit('client_msg', payload);
-};
+  const [userInput, setUserInput] = useState('');
+  const [channelInput, setChannelInput] = useState('');
+  const navigate = useNavigate();
 
-function App() {
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState('');
-
-  useEffect(() => {
-    socket.on('server_msg', (stream) => {
-      console.log(stream);
-    });
-  }, [socket]);
-
-  const handleSubmit = (e) => {
+  function handleSubmit(e) {
     e.preventDefault();
-    setInput('');
-    sendMessage(input);
-  };
+    dispatch({ type: 'JOIN', payload: { user: userInput, channel: channelInput } });
+    setUserInput('');
+    setChannelInput('');
+    navigate('/chat');
+  }
 
   return (
-    <div>
-      {/* Form */}
-      <form onSubmit={handleSubmit}>
-        <input
-          placeholder="Write something..."
-          onChange={({ target }) => setInput(target.value)}
-          value={input}
-        />
-        <button type="submit">Send</button>
-      </form>
+    <Container component="main" maxWidth="sm">
+      {/* Head */}
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexDirection: 'column',
+          m: '1rem',
+          mt: '12rem',
+        }}
+      >
+        <Avatar sx={{ m: 1, bgcolor: 'secondary.primary' }}>
+          <ChatIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">Chat with cool people</Typography>
+      </Box>
 
-      {/* Messages holder shit */}
-      <div />
-    </div>
+      {/* Form and join */}
+      {/* eslint-disable-next-line react/jsx-no-bind */}
+      <Box component="form" onSubmit={handleSubmit}>
+        {/* Username input */}
+        <TextField
+          margin="normal"
+          required
+          fullWidth
+          label="Username"
+          autoFocus
+          onChange={({ target }) => setUserInput(target.value)}
+          value={userInput}
+        />
+
+        {/* Channel input */}
+        <TextField
+          margin="normal"
+          fullWidth
+          label="Channel (optional)"
+          onChange={({ target }) => setChannelInput(target.value)}
+          value={channelInput}
+        />
+
+        {/* Submit button */}
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          sx={{ mt: 3, mb: 2 }}
+        >
+          Join the chat!
+        </Button>
+      </Box>
+    </Container>
   );
 }
 
-export default App;
+export default Join;
