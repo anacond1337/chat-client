@@ -16,6 +16,8 @@ export function UserContextProvider({ children }) {
   const [state, dispatch] = useReducer(userReducer, {
     user: '',
     channel: '',
+
+    // TODO: user color pick
   });
 
   return (
