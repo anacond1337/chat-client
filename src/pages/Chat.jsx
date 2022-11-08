@@ -36,7 +36,7 @@ function Chat() {
 
       {/* Messages holder */}
 
-      <Container>
+      <Container sx={{ height: '80vh', overflowY: 'auto', marginTop: '2.5rem' }}>
         {messages.map((mess) => (
           <Message
             msg={mess}
@@ -57,6 +57,7 @@ function Chat() {
         <TextField
           component="span"
           fullWidth
+          required
           id="fullWidth"
           placeholder="Write something..."
           onChange={({ target }) => setInput(target.value)}
