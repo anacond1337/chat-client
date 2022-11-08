@@ -1,3 +1,7 @@
+import {
+  Avatar, TextField, Button, Container,
+} from '@mui/material';
+import SendIcon from '@mui/icons-material/Send';
 import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 import { v4 as uuidv4 } from 'uuid';
@@ -15,7 +19,6 @@ function App() {
   useEffect(() => {
     socket.on('server_msg', (stream) => {
       setMessages((oldMessage) => [...oldMessage, stream]);
-      console.log(stream);
     });
   }, [socket]);
 
@@ -47,6 +50,13 @@ function App() {
           return <p key={uuidv4()}>{mess.msg}</p>;
         })}
       </div>
+      <Avatar sx={{ bgcolor: 'green' }}>A</Avatar>
+      <Container sx={{ display: 'flex' }}>
+        <TextField component="span" fullWidth id="fullWidth" />
+        <Button component="span" variant="contained" endIcon={<SendIcon />}>
+          Send
+        </Button>
+      </Container>
     </div>
   );
 }
