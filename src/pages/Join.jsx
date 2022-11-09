@@ -54,15 +54,6 @@ function Join() {
           value={userInput}
         />
 
-        {/* Channel input */}
-        <TextField
-          margin="normal"
-          fullWidth
-          label="Channel (optional)"
-          onChange={({ target }) => setChannelInput(target.value)}
-          value={channelInput}
-        />
-
         {/* Submit button */}
         <Button
           type="submit"
