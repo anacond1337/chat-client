@@ -44,6 +44,7 @@ function Chat() {
     sendMessage(input, user);
   };
 
+  /* Loading handling. */
   if (isLoading) {
     return (
       <Container sx={{
@@ -56,6 +57,7 @@ function Chat() {
     );
   }
 
+  /* Error handling. */
   if (isError) {
     return (
       <Container sx={{
